@@ -1,0 +1,67 @@
+{% import "bootstrap/utils.html" as utils %}
+{% extends "layout/base.html" %}
+
+{% block script %}
+{{ super() }}
+{% endblock script %}
+
+{% block content %}
+<div class="content-section">
+  <div class="outer">
+    <div class="middle">
+      <div class="inner">
+        <br/>
+        {{ utils.flashed_messages() }}
+        <br/>
+        <h1 style="text-align:center;">TASKS</h1>
+        {% if task_list %}
+          <hr class="intro-divider">
+          <div class="center">
+            <table class="table table-striped table-bordered">
+              <thead>
+                <tr>
+                  <th width="15%"> Ma cong viec </th>
+                  <th width="40%"> Ten cong viec </th>
+                  <th width="40%"> Mo ta </th>
+                  <th width="15%"> Edit </th>
+                  <th width="15%"> Delete </th>
+                </tr>
+              </thead>
+              <tbody>
+              {% for task in task_list %}
+                <tr>
+                  <td> {{ task.task_code }} </td>
+                  <td> {{ task.task_name }} </td>
+                  <td> {{ task.description }} </td>
+                  <td>
+                    <a href="{{ url_for('task.edit', id=task.id) }}">
+                      <i class="fa fa-pencil"></i> Edit
+                    </a>
+                  </td>
+                  <td>
+                    <a href="{{ url_for('task.delete', id=task.id) }}">
+                      <i class="fa fa-trash"></i> Delete
+                    </a>
+                  </td>
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          <div style="text-align: center">
+        {% else %}
+          <div style="text-align: center">
+            <h3> No departments have been added. </h3>
+            <hr class="intro-divider">
+        {% endif %}
+          <a href="{{ url_for('task.create') }}" class="btn btn-default btn-lg">
+            <i class="fa fa-plus"></i>
+            Add Task
+          </a>
+        </div>
+      </div>
+    </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

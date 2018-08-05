@@ -1,0 +1,9 @@
+<!--cd env-->
+<!--source bin/activate-->
+<!--export FLASK_APP=run.py-->
+<!--flask db init-->
+
+<!--export FLASK_APP=run.py-->
+<!--flask run-->
+
+<!--python3 run.py-->

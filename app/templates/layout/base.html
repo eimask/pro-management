@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% if title %}
+    <title>{{ title }} - Project Manager</title>
+    {% else %}
+    <title>Welcome to Project Manager</title>
+    {% endif %}
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
+
+    {% block script %}
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+    <script type="text/javascript" charset="utf-8">
+        var socket;
+        $(document).ready(function(){
+            socket = io.connect('http://' + document.domain + ':' + location.port);
+            socket.on('connect', function() {
+                socket.emit('joined', {});
+            });
+
+            socket.on('status', function(data) {
+                console.log(data);
+            });
+
+            socket.on('message', function(data){
+                console.log(data);
+                $('#result').text('');
+                $('#result').text(data.msg);
+            });
+        });
+    </script>
+    {% endblock script %}
+
+</head>
+<body>
+    <nav class="navbar navbar-default navbar-fixed-top topnav" role="navigation">
+        <div class="container topnav">
+          <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                  <span class="sr-only">Toggle navigation</span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand topnav" href="{{ url_for('main.index') }}">Project Management</a>
+              <a class="navbar-brand topnav" href="/">Employees</a>
+              <a class="navbar-brand topnav" href="/">Projects</a>
+              <a class="navbar-brand topnav" href="{{ url_for('task.index') }}">Tasks</a>
+              <a class="navbar-brand topnav" href="{{ url_for('role.index') }}">Roles</a>
+              <a class="navbar-brand topnav" href="{{ url_for('userrole.index_user_role') }}">User Roles</a>
+          </div>
+          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+              <ul class="nav navbar-nav navbar-right">
+                  <li>
+                    <p id="result">0</p>
+                    {% if current_user.is_anonymous %}
+                    <a href="{{ url_for('auth.login') }}">Login</a>
+                    {% else %}
+                    <a href="{{ url_for('auth.logout') }}">Logout</a>
+                    {% endif %}
+                  </li>
+              </ul>
+          </div>
+        </div>
+    </nav>
+    <hr>
+
+    <div class="wrapper">
+    {% block content %}
+    
+    {% endblock content %}
+    <div class="push"></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,52 @@
+{% extends "layout/login_base.html" %}
+
+{% block script %}
+{{ super() }}
+{% endblock script %}
+
+{% block content %}
+{% macro render_field(field, placeholder=None) %}
+{% if field.errors %}
+<div>
+    {% elif field.flags.error %}
+<div>
+{% else %}
+<div>
+    {% endif %}
+        {% set css_class = 'form-control ' + kwargs.pop('class', '') %}
+        {{ field(class=css_class, placeholder=placeholder, **kwargs) }}
+</div>
+{% endmacro %}
+
+<div>
+    <div>
+        <legend>Login In</legend>
+
+        {% if form.errors %}
+        <div>
+        {% for field, error in form.errors.items() %}
+        {% for e in errors %}
+        {{ e }}<br>
+        {% endfor %}
+        {% endfor %}
+        </div>
+        {% endif %}
+
+        <form method="post" action="." accept-charset="UTF-8" role="form">
+            {{ form.csrf_token }}
+            {{ render_field(form.username, placeholder="Username", autofocus="") }}
+            {{ render_field(form.password, placeholder="Password") }}
+            <div>
+                <label>
+                    <input type="checkbox" name="remember" value="1">Remember Me
+                </label>
+                <a role="button" href="">Forgot your password?</a><span class="clearfix"></span>
+            </div>
+            <button type="submit" name="submit">Sign In</button>
+        </form>
+        <p>New User? <a href="{{ url_for('auth.register') }}">Click to Register!</a></p>
+    </div>
+</div>
+</div>
+</div>
+{% endblock content %}
